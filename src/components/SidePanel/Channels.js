@@ -1,5 +1,5 @@
 import React from "react";
-import firebase from "../../firebase";
+import firebase from "firebase";
 import { connect } from "react-redux";
 import { setCurrentChannel } from "../../actions";
 import { Menu, Icon, Modal, Form, Input, Button } from "semantic-ui-react";
