@@ -24,7 +24,8 @@ const user_reducer = (state = initialUserState, action) => {
 };
 
 const initialChannelState = {
-  currentChannel: null
+  currentChannel: null,
+  userPosts: null
 };
 
 const channel_reducer = (state = initialChannelState, action) => {
@@ -33,11 +34,17 @@ const channel_reducer = (state = initialChannelState, action) => {
       return {
         ...state,
         currentChannel: action.payload.currentChannel
-      }
+      };
+      return
+    case actionTypes.SET_USER_POSTS:
+      return {
+        ...state,
+        userPosts: action.payload.userPosts
+      };
     default:
       return state;
   }
-}
+};
 
 const rootReducer = combineReducers({
   user: user_reducer,

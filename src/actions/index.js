@@ -25,3 +25,12 @@ export const setCurrentChannel = channel => {
     }
   }
 }
+
+export const setUserPosts = userPosts => {
+  return {
+    type: actionTypes.SET_USER_POSTS,
+    payload: {
+      userPosts
+    }
+  };
+};
