@@ -9,8 +9,15 @@ class UserPanel extends React.Component {
     user: this.props.currentUser,
     modal: false,
     previewImage: "",
-    croppedImage: '',
-    blob: ''
+    croppedImage: "",
+    blob: null,
+    uploadedCroppedImage: "",
+    storageRef: firebase.storage().ref(),
+    userRef: firebase.auth().currentUser,
+    usersRef: firebase.database().ref("users"),
+    metadata: {
+      contentType: "image/jpeg"
+    }
   };
 
   openModal = () => this.setState({ modal: true });
@@ -37,6 +44,45 @@ class UserPanel extends React.Component {
     }
   ];
 
+  uploadCroppedImage = () => {
+    const { storageRef, userRef, blob, metadata } = this.state;
+
+    storageRef
+      .child(`avatars/user-${userRef.uid}`)
+      .put(blob, metadata)
+      .then(snap => {
+        snap.ref.getDownloadURL().then(downloadURL => {
+          this.setState({ uploadedCroppedImage: downloadURL }, () =>
+            this.changeAvatar()
+          );
+        });
+      });
+  };
+
+  changeAvatar = () => {
+    this.state.userRef
+      .updateProfile({
+        photoURL: this.state.uploadedCroppedImage
+      })
+      .then(() => {
+        console.log("PhotoURL updated");
+        this.closeModal();
+      })
+      .catch(err => {
+        console.error(err);
+      });
+
+    this.state.usersRef
+      .child(this.state.user.uid)
+      .update({ avatar: this.state.uploadedCroppedImage })
+      .then(() => {
+        console.log("User avatar updated");
+      })
+      .catch(err => {
+        console.error(err);
+      });
+  };
+
   handleChange = event => {
     const file = event.target.files[0];
     const reader = new FileReader();
@@ -59,7 +105,7 @@ class UserPanel extends React.Component {
         });
       });
     }
-  }
+  };
 
   handleSignout = () => {
     firebase
@@ -124,7 +170,7 @@ class UserPanel extends React.Component {
                   <Grid.Column>
                     {croppedImage && (
                       <Image
-                        style={{ margin: '3.5em auto' }}
+                        style={{ margin: "3.5em auto" }}
                         width={100}
                         height={100}
                         src={croppedImage}
@@ -135,9 +181,15 @@ class UserPanel extends React.Component {
               </Grid>
             </Modal.Content>
             <Modal.Actions>
-              {croppedImage && <Button color="green" inverted>
-                <Icon name="save" /> Change Avatar
-              </Button>}
+              {croppedImage && (
+                <Button
+                  color="green"
+                  inverted
+                  onClick={this.uploadCroppedImage}
+                >
+                  <Icon name="save" /> Change Avatar
+                </Button>
+              )}
               <Button color="green" inverted onClick={this.handleCropImage}>
                 <Icon name="image" /> Preview
               </Button>
