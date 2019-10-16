@@ -22,14 +22,17 @@ const App = ({ currentUser, currentChannel }) => (
     </Grid.Column>
 
     <Grid.Column width={4}>
-      <MetaPanel />
+      <MetaPanel
+        key={currentChannel && currentChannel.id}
+        currentChannel={currentChannel}
+      />
     </Grid.Column>
   </Grid>
 );
 
 const mapStateToProps = state => ({
   currentUser: state.user.currentUser,
-  currentChannel: state.channel.currentChannel
+  currentChannel: state.channel.currentChannel,
 });
 
 export default connect(mapStateToProps)(App);
