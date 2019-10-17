@@ -11,6 +11,7 @@ import {
   Icon
 } from "semantic-ui-react";
 import { Link } from "react-router-dom";
+import logo from "../../static/logo.jpg"
 
 class Register extends React.Component {
   state = {
@@ -131,9 +132,9 @@ class Register extends React.Component {
     return (
       <Grid textAlign="center" verticalAlign="middle" className="app">
         <Grid.Column style={{ maxWidth: 450 }}>
-          <Header as="h1" icon color="orange" textAlign="center">
-            <Icon name="puzzle piece" color="orange" />
-            Register for DevChat
+          <img height="150px"src={logo} alt="606 Logo"></img>
+          <Header as="h1" icon color="blue" textAlign="center">
+            Register for Our Chat Room
           </Header>
           <Form onSubmit={this.handleSubmit} size="large">
             <Segment stacked>
@@ -187,7 +188,7 @@ class Register extends React.Component {
               <Button
                 disabled={loading}
                 className={loading ? "loading" : ""}
-                color="orange"
+                color="blue"
                 fluid
                 size="large"
               >
